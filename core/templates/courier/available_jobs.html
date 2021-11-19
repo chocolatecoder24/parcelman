@@ -1,0 +1,160 @@
+{% extends 'courier/base.html' %}
+
+{% load humanize %}
+
+{% block title %}{{ request.user.get_full_name }} -  courier available jobs dashboard{% endblock %}
+
+{% block head %}
+<script
+      src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&v=weekly"
+      async
+></script>
+
+<script>
+function initMap() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: { lat: 9.0820, lng: 8.6753 },
+        //mapTypeId: 'satellite'
+    });
+    
+    // Get available jobs from percelman API
+    fetch("{% url 'courier:available_jobs_api' %}")
+    .then(response => response.json())
+    .then(json => {
+        //console.log(json)
+
+        // Create a new viewpoint bound
+
+        var bounds = new google.maps.LatLngBounds();
+
+
+        for (let i=0; i < json.jobs.length; i++){
+            const job = json.jobs[i];
+            const position = {
+                lat: job.pickup_lat,
+                lng: job.pickup_lng
+            };
+            const marker = new google.maps.Marker({
+                position: position,
+                map: map,
+            });
+
+            // Increase the bounds to take this point
+
+            bounds.extend(position);
+
+            new google.maps.InfoWindow({
+                content: "<small><b>" + job.name + "</b></small><br/><small>" + job.distance + " km</small><br/><small>" + job.duration + " mins journey</small>"
+            }).open(map, marker);
+
+            //Click event for each listings
+            marker.addListener("click", () => {
+                showJobDetails(job);
+            });
+
+            //Fit these bounds to the map
+
+            map.fitBounds(bounds);
+        }
+
+
+
+    })
+
+}
+
+
+function showJobDetails(job) {
+    $("#job-details").css("display", "block");
+    $("#job-name").html(job.name);
+
+    $("#job-photo").attr('src', "/media/" + job.photo);
+    $("#pickup-address").html(job.pickup_address);
+    $("#delivery-address").html(job.delivery_address);
+    $("#duration").html(job.duration);
+    $("#distance").html(job.distance);
+    $("#price").html(job.price);
+
+    $("#job-details").on("click", function(){
+        window.location.href = "/courier/jobs/available/" + job.id + "/"
+    })
+}
+
+    messaging.onMessage((payload)=>{
+        window.location.reload();
+    })
+    
+</script>
+
+<style>
+    .gm-ui-hover-effect {
+        display: none !important;
+    }
+    #map {
+        flex: 1;
+    }
+    small {
+        font-size: 12px;
+        line-height: 1.2rem;
+    }
+    .card {
+        border: none;
+    }
+    #job-details {
+        display: none;
+    }
+
+    .shadow {
+        border-top: 2px solid #eee;
+        box-shadow: 0 1px 5px rgb(0 0 0 / 20%) !important;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% include 'courier/bottom_tabs.html' %}
+
+<div class="d-flex flex-column h-100" style="padding-bottom: 60px">
+    <div id="map"></div>
+
+    <div id="job-details" class="card">
+        <div class="card-body p-3 shadow">
+            <div class="media">
+                <div class="media-body">
+                    <div class="d-flex">
+                        <img id="job-photo" class="rounded me-3" width="50px" height="50px">
+                        <div class="flex-grow-1 me-2">
+                            <h5 id="job-name"></h5>
+                            <small class="text-success">
+                                <i class="fas fa-car"></i><span id="distance"></span> Km
+                                <i class="fas fa-clock ms-2"></i><span id="duration"></span> Mins
+                            </small>
+
+                            <div class="d-flex align-items-center mt-2">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <small id="pickup-address" class="text-secondary ms-2"></small>
+                            </div>
+
+                            <div class="d-flex align-items-center mt-2">
+                                <i class="fas fa-flag-checkered"></i>
+                                <small id="delivery-address" class="text-secondary ms-2"></small>
+                            </div>
+
+                        </div>
+
+                        <h5>₦</h5><h5 id="price">
+                    <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock%}

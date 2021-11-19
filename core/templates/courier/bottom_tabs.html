@@ -1,0 +1,68 @@
+<style>
+
+    .bottom-tabs {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        padding:5px;
+        z-index: 99999;
+        background-color: #fff;
+        border-top: 2px solid #eee;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.2) !important;
+        text-align: center;
+    }
+
+    .bottom-tabs>a {
+        flex: 1;
+        padding: 5px;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .bottom-tabs>a>span {
+        font-size: 13px;
+        font-weight: bold;
+        display: block;
+    }
+
+    .bottom-tabs>a>i {
+        font-size: 20px;
+    }
+
+    .bottom-tabs>a.active {
+        color: #ff9800;
+    }
+
+</style>
+
+{% url 'courier:available_jobs' as available_jobs_url %}
+{% url 'courier:current_jobs' as current_jobs_url %}
+{% url 'courier:archived_jobs' as archived_jobs_url %}
+{% url 'courier:profile' as profile_url %}
+
+
+
+
+<div class="bottom-tabs d-flex">
+    <a href="{% url 'courier:available_jobs' %} " class=" {% if request.path == available_jobs_url %}active{% endif %} ">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Available Jobs</span>
+    </a>
+    <a href="{% url 'courier:current_jobs' %}" class=" {% if request.path == current_jobs_url or request.path == archived_jobs_url %}active{% endif %} ">
+        <i class="fas fa-archive"></i>
+        <span>My Jobs</span></span>
+    </a>
+    <a href="{% url 'courier:profile' %}" class=" {% if request.path == profile_url %}active{% endif %} ">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </a>
+</div>
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>

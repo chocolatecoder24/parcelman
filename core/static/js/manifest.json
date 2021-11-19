@@ -1,0 +1,12 @@
+{
+    "start_name": "Parcelman",
+    "name": "welcome to Percelman App",
+    "description": "The best shipping application for small businesses",
+    "icons": [{
+        "src": "/static/img/logo.png",
+        "type": "image/png",
+        "sizes": "512x512"
+    }],
+    "start_url": "/courier/",
+    "display": "standalone"
+}

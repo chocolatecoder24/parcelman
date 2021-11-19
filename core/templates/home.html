@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} a courier packing hub for everyone {% endblock %}
+
+{% block content%}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-12 text-center mb-4">
+            <h1>Welcome to Parcelman</h1>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">CUSTOMER</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href=" {% url 'customer:home' %} " class="btn btn-warning white">Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">COURIER</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href=" {% url 'courier:home' %} " class="btn btn-warning white">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

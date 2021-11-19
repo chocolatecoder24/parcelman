@@ -1,0 +1,132 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff9800">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/logo.png' %}">
+    <link rel="manifest" href="{% static 'js/manifest.json' %}">
+
+    <title>Parcelman - Courier | {% block title %}{% endblock %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    {# Load the tag library #}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    {% include 'load_firebase.html' %}
+
+    <script>
+      const messaging = firebase.messaging();
+      messaging.getToken({
+        validKey: "BCX0oG90sPNAzP61HMWRydnk1m0GyHUfn8aNX5TANlYEV9tYoMda4CnfJVNFPwjdrEAWm8F9AAQra7-MmJjqJYw"
+      }).then((currentToken)=> {
+        console.log(currentToken)
+        if (currentToken) {
+          fetch('{% url "courier:fcm_token_update_api" %}?fcm_token=' + currentToken);
+        }
+      }).catch((err)=>{
+        console.log('An error has occurred while retrieving token.', err);
+      })
+    </script>
+
+    <script>
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    </script>
+
+    <style>
+      #content {
+        height: calc(var(--vh, 1vh) * 100);
+      }
+      .btn-block {
+        width: 100%;
+      }
+        .list-group-item.active {
+            border: none;
+        }
+
+        .btn-warning {
+          border-color: #ff9800 !important;
+          background-color: #ff9800 !important;
+          color: #fff !important;
+        }
+
+        .btn-outline-warning {
+          border-color: #ff9800 !important;
+        }
+
+        .btn-outline-warning:hover {
+          background-color: #ff9800 !important;
+          color: #fff !important;
+        }
+
+        .bg-canceled {
+          background-color: red !important;
+        }
+
+        textarea:focus,
+        .form-select:focus,
+        textarea.form-control:focus, 
+        input.form-control:focus, 
+        input[type=text]:focus, 
+        input[type=password]:focus, 
+        input[type=email]:focus, 
+        input[type=number]:focus, 
+        [type=text].form-control:focus, 
+        [type=password].form-control:focus, 
+        [type=email].form-control:focus, 
+        [type=tel].form-control:focus, 
+        [contenteditable].form-control:focus {
+          border: 1px solid #ddd;
+          border-bottom: 1px solid #ff9800;
+          box-shadow: inset 0 -1px 0 #ff9800;
+        }
+
+        .btn:focus {
+          box-shadow: none !important;
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    
+    <div id="content">
+      {% block content%} {% endblock%}
+    </div>
+
+    <script src="https://unpkg.com/bootoast@1.0.1/dist/bootoast.min.js?v=1.0.1"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bootoast@1.0.1/dist/bootoast.min.css?v=1.0.1">
+
+    <script>
+    function toast(message, type) {
+      bootoast.toast({
+        position: 'centerBottom',
+        "icon": "",
+        "animationDuration": 300,
+        "dismissable": false,
+        message,
+        type,
+
+      });
+    }
+
+    {% if messages %}
+      {% for message in messages %}
+        toast('{{ message }}', '{{ message.tags }}');
+      {% endfor %}
+
+    {% endif %}
+    
+    </script>
+
+</body>
+</html>

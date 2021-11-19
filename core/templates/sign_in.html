@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load bootstrap5 %}
+
+{% block title %}
+    {% if request.GET.next != "/courier/" %}Customer{% else %}Courier{% endif %} sign-in
+{% endblock %}
+
+{% block head %}
+<style>
+    .btn-block {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="text-center text-uppercase mb-4">
+                        <b>
+                            {% if request.GET.next != "/courier/" %}
+                            Customer
+                            {% else %}
+                            Courier
+                            {% endif %}
+                        </b>
+                    </h4>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form_errors form %}
+                        {% bootstrap_label "Email" %}
+                        {% bootstrap_field form.username show_label=False placeholder="Email" %}
+                        {% bootstrap_field form.password %}
+                        <button class="btn btn-outline-warning btn-block white">
+                            sign-in
+                        </button>
+                        <p class="text-center mt-3 ">
+                            New to Parcelman? <a href="/sign-up/?next={{ request.GET.next }}" class="text-decoration-none">sign-up</a>
+                        </p>
+                        <hr>
+                        <a href="{% url 'social_auths:begin' 'facebook' %}?next={{ request.Get.next }}" 
+                        class="btn btn-outline-primary btn-block">Sign in with Facebook
+                        </a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'courier/base.html' %}
+{% load static %}
+
+{% block title %}Available Job - {{ job.name }}{% endblock %}
+
+
+{% block head %}
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        background-color: #ff9800;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    }
+    .header>a>i {
+    background: #fff;
+    padding: 7px 15px;
+    border-radius: 5px;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="header">
+    <a href="{% url 'courier:available_jobs' %}" class="me-2">
+        <i class="fas fa-chevron-left text-dark"></i>
+    </a>
+    <h5 class="text-white pt-1">Available Jobs</h5>
+</div>
+
+<div class="container-fluid" style="padding-top: 80px;">
+    <div class="media">
+        <div class="media-body">
+            <div class="d-flex">
+                <img src="{{ job.photo.url }}" class="rounded me-3" width="100" height="100">
+                <div>
+                    <h4>{{ job.name }}</h4>
+                    <span>{{ job.get_size_display }} Size</span><br/>
+                    <span>{{ job.quantity }} Items</span><br/>
+                    <span>{{ job.price }} Price</span><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div>
+        <div class="d-flex align-items-center text-secondary mb-2">
+            <i class="fas fa-map-marker-alt me-2"></i>
+            <div>
+                <span><small class="text-warning"><b>Pickup Address</small></b></small></span><br/>{{ job.pickup_address }}</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="d-flex align-items-center text-secondary mb-2">
+            <i class="fas fa-flag-checkered me-2"></i>
+            <div>
+                <span><small class="text-success"><b>Delivery Address</small></b></span><br/>{{ job.delivery_address }}</span>
+            </div>
+        </div>
+    </div>    
+    <hr>
+
+    <b class="text-secondary">CUSTOMER</b>
+    <div class="media align-items-center d-flex mt-2">
+        <img src="{% if job.customer.avatar %} {{ job.customer.avatar.url }} {% else %} {% static 'img/avatar.png' %} {% endif %}" class="rounded-full me-3" width="60" height="60">
+
+        <div class="media-body">
+            <h5 class="text-warning">{{ job.customer.user.get_full_name }}</h5>
+            <span>{{ job.customer.phone_number }}</span>
+        </div>
+    </div>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button class="btn btn-warning btn-block">Accept this Job</button>
+    </form>
+
+
+
+</div>
+
+{% endblock %}

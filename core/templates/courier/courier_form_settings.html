@@ -1,0 +1,48 @@
+{% extends 'courier/base.html' %}
+
+{% block title %}{{ request.user.get_full_name }} settings dashboard{% endblock %}
+
+
+{% load bootstrap5 %}
+
+{% block head %}
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        background-color: #ff9800;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    }
+    .header>a>i {
+    background: #fff;
+    padding: 7px 15px;
+    border-radius: 5px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+
+<div class="header">
+    <a href="{% url 'courier:profile' %}" class="me-2">
+        <i class="fas fa-chevron-left text-dark"></i>
+    </a>
+    <h5 class="text-white pt-1">Profile</h5>
+</div>
+
+<div class="container-fluid" style="padding-top: 80px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form courier_form %}
+            {% bootstrap_form courier_settings_form %}
+            <button type="submit" class="btn btn-warning btn-block">Save Profile</button>
+        </form>
+</div>
+  
+{% endblock %}
