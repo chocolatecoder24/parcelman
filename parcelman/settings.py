@@ -163,7 +163,7 @@ FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "parcelman-e55f5-firebase-adm
 PAYSTACK_PUBLIC_KEY = "pk_test_e2e9be2a86d6cb15e83346c84d16bfe08a6ed061"
 PAYSTACK_SECRET_KEY = "sk_test_066dfcd106a094b261e2072a55232f372b2553c3"
 
-NOTIFICATION_URL = "https://quiet-sands-58763.herokuapp.com/"
+NOTIFICATION_URL = "https://evening-river-80443.herokuapp.com/"
 
 ASGI_APPLICATION = "parcelman.asgi.application"
 CHANNEL_LAYERS = {
